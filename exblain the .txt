@@ -1,0 +1,287 @@
+the project for joops
+____________________
+
+//if you have many variable you want to accesses in view we use compact,but we should write all the variable inside
+we have A NEW FNC get_defined_vars();we don't put any argument he accepts all
+
+1 the Register page
+what the new =
+
+unique:users //it unique fior table users
+confirmed//to compare the password and repate password
+
+
+2-login bage
+ Redirect::intended();
+Certainly! The Redirect::intended() method in Laravel is used to redirect the user to their intended destination after successful authentication. It's commonly used when you want to redirect the user back to the page they were trying to access before they were prompted to log in.
+
+Here's how Redirect::intended() works:
+
+After a user attempts to access a protected route but is redirected to the login page, Laravel stores the original intended URL in the session.
+
+Once the user successfully logs in, Laravel retrieves the intended URL from the session using the Redirect::intended() method.
+
+The Redirect::intended() method then performs a redirect to the intended URL, allowing the user to continue their desired action.
+
+
+/& if you have login we use Auth function helber
+   $request->validate([
+            'email' => 'required|email|max:255',
+            'password' => 'required|min:6'
+        ]);
+        $credentials =  $request->only('email','password');
+        if(Auth::attempt($credentials)){
+            return Redirect::intended('dashboard');
+
+//only('email','password');to ge the email an password
+//Auth::attempt to compare the email and password in db is the same or not
+
+/& if the user login how to display the name
+{{auth()->user()->name_table}}
+
+
+/& if you want to know if ther user login or not we use
+ @if(auth()->check())
+
+
+
+/& okay how to send the message if he login sucssefulle we use with function
+
+ return redirect('/login')->with('successMessage', 'Your account was created.');
+
+//okay how to disblay in login
+                @if(Session::has('successMessage'))
+                   {{Session::get('successMessage')}}
+                @endif
+
+
+
+// when you wan to make  a free trial for a weak or month use now and ad th time you want
+  now()->addWeek()
+
+
+
+/jop post steps
+we make a resource controller
+and when store the post we add image
+  $imagePath = $request->file('feature_photo')->store('images','public');//\storage\app\public
+
+
+and we use slug because make a url more clean
+'slug' => Str::slug($request->title) . '.' . Str::uuid(),//uuid to make a uniqu random for the url
+
+
+and when we put the date we have a problem
+the date is no format coorctly
+
+  'application_close_date' => Carbon::createFromFormat('d/m/Y', $request->application_close_date)->format('Y-m-d'),
+
+
+//ande how to find the id for update
+we get the name of model  and use find
+$post = Listing::find($id);
+
+// and when we make update for the post
+  Listing::find($id)->update($request->except('feature_photo'));//he update all the data but photo no
+
+
+
+
+
+
+The line Auth::login($user) is used to log in the user programmatically after creating their account. Here's why we do this:
+
+User Authentication: Logging in the user allows them to access authenticated features and restricted areas of your application. It verifies their identity and grants them access to protected resources.
+
+Session Creation: When a user is logged in, a session is created for that user. The session keeps track of the user's authenticated state and allows the application to identify the user across multiple requests. This is essential for maintaining the user's state and providing a personalized experience.
+
+
+//how to store the photo and update
+
+  if ($request->hasFile('profile_pic')) {
+            $oldImagePath = auth()->user()->profile_pic;
+// here we check have a photo and we get the auth profile
+
+  // Delete the old profile photo if it exists
+            if ($oldImagePath && Storage::disk('public')->exists($oldImagePath)) {
+                Storage::disk('public')->delete($oldImagePath);
+            }
+
+
+//we get the Storage::disk ('public') and we show if exixst or not if exist
+  Storage::disk('public')->delete($oldImagePath); // we make delete
+
+
+
+//we need to store the profile if he didnt exxist
+
+ $imagePath = $request->file('profile_pic')->store('profile', 'public');
+            User::find(auth()->user()->id)->update(['profile_pic' => $imagePath]);
+        }
+//we first store the photo and this if he has the photo maake update with the id
+  User::find(auth()->user()->id)->update(['profile_pic' => $imagePath]);
+
+//and then we update the all of data excpt the profile
+ User::find(auth()->user()->id)->update($request->except('profile_pic'));
+        return back()->with('successMessage', 'Your profile has been updated');
+    }
+
+
+//how to update the password
+
+        $user = auth()->user();
+//we get the user
+
+        // Check if the current password provided matches the user's actual password
+        if (!Hash::check($request->current_password, $user->password)) {//we get the current password and the $user->PASSWORD OF DP
+            return back()->with('errorMessage', 'Current password is incorrect');
+        }
+
+        // Update the user's password
+        $user->password = Hash::make($request->password);//why we use the hash becuse the password is aready hash we need to use the funk we need to get the user password
+and equal the password
+        $user->save();
+
+        return back()->with('successMessage', 'Your password has been updated successfully');
+
+
+
+| many to many for users and listing
+|---------------------------------------------!
+user                     listing
+1                           2
+1                           3
+2                           2
+4                           3
+we have many to many we should make a new  table
+| steps
+1-make migration and model and controller
+2-in model we should but the relation
+  $this->belongsToMany(User::class,'listing_user','listing_id','user_id')
+        ->withPivot('accepted','reject')//The withPivot method allows you to specify additional columns you want to retrieve from the pivot table.
+         ->withTimestamps();
+
+3-controller showApplication
+.okay we first we want to get the id of listing created by me
+..we want to get who is the user applied for my jop
+-> to get this we  use fn (with) it solve the N+1 okay if you want to get the count (withCount)
+  $listings = Listing::withCount('users')->where('user_id', auth()->user()->id)->get();
+  Listing::withCount('users'): This line uses the withCount() method to eager load the count of related users for each Listing model. The 'users' parameter specifies the relationship name between the Listing model and the User model.
+
+
+| Applications
+|---------------------------------------------!
+//we use the slug it equal for id you can use slug or listing:slug it equal =id but more secure
+Route::get('dashboard/application/{listing:slug}', [ApplicationController::class, 'showApplication'])->name('show.application');
+
+// the function is how ti insert the slug name model and name you a signed in route listing
+
+ public function showApplication(Listing $listing) || we make a policy it was like the middleware
+
+    {
+    1-how to make policy php artisan make:policy ListingPolicy and we go the policy file and make fnc
+    2- we go the file in Providers\AuthServiceProvider // then we aseeign the policy we make we shose the mode we need to use
+     protected $policies = [
+            Listing::class=>ListingPolicy::class,
+        ];
+    /*
+    okay first we out the models and we compare the id of user  and id of $listing->user_id
+     public function view(User $user,Listing $listing){
+           return $user->id===$listing->user_id;
+        }
+*/
+
+        //we make a police to chek if the id == user_id in listing or not
+        $this->authorize('view',$listing);
+        $listings = Listing::with('users')->where('slug',$listing->slug)->first();
+        return view('application.post',compact('listings'));
+    }
+
+
+// and then we make accept the jop or reject
+public function acceptedApplication($listingID, $userID)
+{
+    // Find the listing with the given ID
+    $listing = Listing::find($listingID);
+
+    // Check if the listing exists
+    if ($listing) {
+        // Update the pivot table for the relationship between the listing and user
+        $listing->users()->updateExistingPivot($userID, [
+            'accepted' => true, // Set 'accepted' column to true
+            'reject' => '0' // Set 'reject' column to '0'
+        ]);
+
+        // Redirect back to the previous page with a success message
+        return back()->with('successMessage', 'User accepted successfully');
+    }
+
+    // If the listing does not exist, simply redirect back to the previous page
+    return back();
+}
+
+public function rejectApplication($listingID, $userID)
+{
+    // Find the listing with the given ID
+    $listing = Listing::find($listingID);
+
+    // Check if the listing exists
+    if ($listing) {
+        // Update the pivot table for the relationship between the listing and user
+        $listing->users()->updateExistingPivot($userID, [
+            'accepted' => '0', // Set 'accepted' column to '0'
+            'reject' => true // Set 'reject' column to true
+        ]);
+
+        // Redirect back to the previous page with an error message
+        return back()->with('errorMessage', 'User rejected successfully');
+    }
+
+    // If the listing does not exist, simply redirect back to the previous page
+    return back();
+}
+//what is the updateExistingPivot we use this because we want to make update fo the pivot table
+
+The updateExistingPivot method is used to update the attributes of a pivot table record that relates two models in a many-to-many relationship. In the provided code, it is used to update the pivot table record between the Listing model and the User model.
+
+The updateExistingPivot method accepts two parameters: the ID of the related model ($userID in this case)
+and an array of attributes to update. In the code snippet you provided, the acceptedApplication and
+ rejectApplication functions both use updateExistingPivot to update the pivot table record with the given $userID.
+
+
+//how to accses the table have many to many relation we use pivot ($user->pivot->accepted)
+
+
+
+
+| ont to many for users and listing jop
+|---------------------------------------------!
+we need to disblay the table users to get the name of company
+
+userstable                      postsjops
+1                   many            2posts
+but it impossible the user have the same boost for the different user
+we make the boosts belong to one user
+
+
+
+//auth
+in Laravel, the Auth facade is a convenient way to interact with the authentication system. It provides a set of methods that allow you to perform authentication-related tasks, such as user login, logout, and user retrieval.
+
+The Auth facade is used to access the underlying authentication services provided by Laravel. It is a part of Laravel's built-in authentication system, which includes functionality for managing user authentication, registration, and password reset.
+
+Here are some commonly used methods provided by the Auth facade:
+
+attempt(array $credentials, bool $remember = false): This method attempts to authenticate a user using the provided credentials. It takes an array of credentials (typically containing email and password) and an optional boolean parameter to specify if the user should be remembered (via "Remember Me" functionality).
+
+login(UserContract $user, bool $remember = false): This method logs in a user manually. It takes an instance of the UserContract interface (typically an instance of the User model) and an optional boolean parameter to specify if the user should be remembered.
+
+logout(): This method logs out the currently authenticated user.
+
+user(): This method returns the currently authenticated user as an instance of the UserContract interface.
+
+check(): This method checks if a user is currently authenticated and returns a boolean indicating the result.
+
+id(): This method returns the ID of the currently authenticated user or null if no user is authenticated.
+
+These are just a few examples of the methods provided by the Auth facade. Laravel's authentication system offers more features and methods that can be used to perform various authentication-related tasks. You can refer to the Laravel documentation for more detailed information on working with the Auth facade and the authentication system in general.
