@@ -100,4 +100,6 @@ class ProfileController extends Controller
         $users = User::with('listings')->where('id',auth()->user()->id)->get();
         return view('profile.usersProfile',compact('users'));
     }
+
+
 }

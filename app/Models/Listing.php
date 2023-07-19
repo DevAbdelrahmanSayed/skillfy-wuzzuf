@@ -17,6 +17,7 @@ class Listing extends Model
         'roles',
         'job_type',
         'slug',
+        'favorite',
         'feature_photo',
         'address',
         'salary',

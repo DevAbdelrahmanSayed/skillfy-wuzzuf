@@ -10,7 +10,7 @@
     @include('layout.seekers.nav')
     <!-- Navbar End -->
 
-
+    @include('message')
     <!-- Header End -->
     <div class="container-xxl py-5 bg-dark page-header mb-5">
         <div class="container my-5 pt-5 pb-4">
@@ -23,7 +23,7 @@
         </div>
     </div>
     <!-- Header End -->
-    @include('message')
+
 
     <!-- Jobs Start -->
     <div class="container-xxl py-5">
@@ -65,7 +65,7 @@
                             @foreach($jobs as $job)
                                 <div class="row g-4">
                                     <div class="col-sm-12 col-md-8 d-flex align-items-center">
-                                        <img class="flex-shrink-0 img-fluid border rounded-circle" src="{{ Storage::url($job->user_posts->profile_pic) }}" alt="" style="width: 80px; height: 80px;">
+                                        <img class="flex-shrink-0 img-fluid border rounded-circle" src="{{ Storage::url($job->feature_photo) }}" alt="" style="width: 80px; height: 80px;">
 
                                         <div class="text-start ps-4">
                                             <h5 class="mb-3">{{ $job->title }}</h5>
@@ -76,7 +76,26 @@
                                     </div>
                                     <div class="col-sm-12 col-md-4 d-flex flex-column align-items-start align-items-md-end justify-content-center">
                                         <div class="d-flex mb-3">
-                                            <a class="btn btn-light btn-square me-3" href=""> <i class="far fa-heart text-primary"></i></a>
+
+                                            @if(auth()->user()->favorites->contains($job))
+                                                <!-- If the job is a favorite, show the "Unfavorite" button -->
+                                                <form action="{{ route('posts.UnFavorite', $job->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-light btn-square me-3">
+                                                        <i class="fas fa-heart text-primary"></i>
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <!-- If the job is not a favorite, show the "Favorite" button -->
+                                                <form action="{{ route('posts.favorite', $job->id) }}" method="POST">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-light btn-square me-3">
+                                                        <i class="far fa-heart text-primary"></i>
+                                                    </button>
+                                                </form>
+                                            @endif
+
                                             <a class="btn btn-primary" href="{{route('show.jobs',[$job->slug])}}">Apply Now</a>
                                         </div>
                                         <small class="text-truncate"><i class="far fa-calendar-alt text-primary me-2"></i>Date Line: {{ $job->application_close_date }} </small>
@@ -90,9 +109,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
+
 
     <!-- Jobs End -->
 

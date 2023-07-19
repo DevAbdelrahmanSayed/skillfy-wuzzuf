@@ -1,14 +1,16 @@
 
-@extends('layout.app')
-@section('content')
+@include('layout.seekers.header')
+<body>
+<div class="container-xxl bg-white p-0">
 
-<div class="container mt-5">
+    <!-- Navbar Start -->
+    @include('layout.seekers.nav')
+    <!-- Navbar End -->
     <div class="row">
         <div class="col-md-6">
             <h1>Looking for a job?</h1>
             <h3>Please create an account</h3>
-            <img src="{{asset('image/jop.png')}}" width="580"
-            class="img-responsibe">
+            <img src="{{asset('image/jop.png')}}" width="580" class="img-fluid" alt="Job Portal Image">
         </div>
 
         <div class="col-md-6 mt-5 mb-5">
@@ -55,4 +57,7 @@
         </div>
     </div>
 </div>
-@endsection
+@include('layout.seekers.links')
+</body>
+
+</html>

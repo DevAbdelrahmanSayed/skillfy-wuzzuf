@@ -19,12 +19,14 @@ return new class extends Migration
             $table->text('roles');
             $table->string('job_type');
             $table->string('slug');
+            $table->boolean('savedpost')->default(false);
             $table->string('feature_photo');
             $table->string('address');
             $table->integer('salary');
             $table->date('application_close_date');
             $table->timestamps();
         });
+
     }
 
     /**

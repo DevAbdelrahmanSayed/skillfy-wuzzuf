@@ -15,8 +15,8 @@
         <div class="row mt-5">
             <div class="col-md-8">
                 <h3>List of Jobs</h3>
-                @foreach($users as $user)
-                @foreach($user->listings as $job)
+                @foreach($userFavorites as $job)
+
                         <div class="card mb-3">
                             <div class="card-body">
                                 <h5 class="card-title">{{$job->title}}</h5>
@@ -25,12 +25,10 @@
                             </div>
                         </div>
                     @endforeach
-                @endforeach
+
             </div>
         </div>
     </div>
-
-
 
 
     <!-- Back to Top -->

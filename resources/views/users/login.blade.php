@@ -1,12 +1,16 @@
-@extends('layout.app')
-@section('content')
 
-    <div class="container mt-5">
+@include('layout.seekers.header')
+<body>
+<div class="container-xxl bg-white p-0">
+
+    <!-- Navbar Start -->
+    @include('layout.seekers.nav')
+    <!-- Navbar End -->
         <div class="row">
             <div class="col-md-6">
                 <h1>Welcome back?</h1>
                 <h3>Please log in to your account</h3>
-                <img src="{{ asset('image/login.png') }}" width="440" class="img-responsibe">
+                <img src="{{ asset('image/login.png') }}"  width="580" class="img-fluid" alt="Job Portal Image">
             </div>
             <div class="col-md-6 mt-5 mb-5">
                 @include('message')
@@ -39,4 +43,8 @@
             </div>
         </div>
     </div>
-@endsection
+@include('layout.seekers.links')
+</body>
+
+</html>
+

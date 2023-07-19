@@ -12,7 +12,10 @@ use PhpParser\Node\Expr\New_;
 class ApplicationController extends Controller
 {
 
-
+    public function __construct()
+    {
+        $this->middleware(['auth', 'verified', 'employ']);
+    }
     public function createApplication()
     {
         $listings = Listing::latest()->withCount('users')->where('user_id', auth()->user()->id)->get();
