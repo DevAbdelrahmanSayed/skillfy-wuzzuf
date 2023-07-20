@@ -16,7 +16,7 @@ class FavoriteController extends Controller
     public function addFavorite(Listing $post)
     {
         auth()->user()->favorites()->attach($post->id);
-        $post->favorite = true;
+        $post->savedpost  = true;
         $post->save();
 
         return redirect()->back()->with('successMessage', 'Post added to favorites.');
@@ -25,7 +25,7 @@ class FavoriteController extends Controller
     public function removeFavorite(Listing $post)
     {
         auth()->user()->favorites()->detach($post->id);
-        $post->favorite = false;
+        $post->savedpost  = false;
         $post->save();
 
         return redirect()->back()->with('successMessage', 'Favorite removed successfully.');

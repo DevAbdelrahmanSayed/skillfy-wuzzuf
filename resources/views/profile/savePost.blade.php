@@ -16,7 +16,6 @@
             <div class="col-md-8">
                 <h3>List of Jobs</h3>
                 @foreach($userFavorites as $job)
-
                         <div class="card mb-3">
                             <div class="card-body">
                                 <h5 class="card-title">{{$job->title}}</h5>
@@ -25,7 +24,6 @@
                             </div>
                         </div>
                     @endforeach
-
             </div>
         </div>
     </div>

@@ -25,7 +25,7 @@
     </div>
     <!-- Header End -->
 
-
+    @include('message')
     <!-- Contact Start -->
     <div class="container-xxl py-5">
         <div class="container">
@@ -65,33 +65,48 @@
                             frameborder="0" style="min-height: 400px; border:0;" allowfullscreen="" aria-hidden="false"
                             tabindex="0"></iframe>
                 </div>
+
                 <div class="col-md-6">
                     <div class="wow fadeInUp" data-wow-delay="0.5s">
+                        <!-- Display Error Messages -->
                         <p class="mb-4">The contact form is currently inactive. Get a functional and working contact form with Ajax & PHP in a few minutes. Just copy and paste the files, add a little code and you're done. <a href="https://htmlcodex.com/contact-form">Download Now</a>.</p>
-                        <form>
+                        <form action="{{ route('store.contact') }}" method="post">
+                            @csrf
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input type="text" class="form-control" id="name" placeholder="Your Name">
+                                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" placeholder="Your Name" value="{{ old('name') }}">
                                         <label for="name">Your Name</label>
+                                        @error('name')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input type="email" class="form-control" id="email" placeholder="Your Email">
+                                        <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="email" placeholder="Your Email" value="{{ old('email') }}">
                                         <label for="email">Your Email</label>
+                                        @error('email')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-floating">
-                                        <input type="text" class="form-control" id="subject" placeholder="Subject">
+                                        <input type="text" name="subject" class="form-control @error('subject') is-invalid @enderror" id="subject" placeholder="Subject" value="{{ old('subject') }}">
                                         <label for="subject">Subject</label>
+                                        @error('subject')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-floating">
-                                        <textarea class="form-control" placeholder="Leave a message here" id="message" style="height: 150px"></textarea>
+                                        <textarea class="form-control @error('message') is-invalid @enderror" name="message" placeholder="Leave a message here" id="message" style="height: 150px">{{ old('message') }}</textarea>
                                         <label for="message">Message</label>
+                                        @error('message')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="col-12">
@@ -101,9 +116,6 @@
                         </form>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
     <!-- Contact End -->
 
 

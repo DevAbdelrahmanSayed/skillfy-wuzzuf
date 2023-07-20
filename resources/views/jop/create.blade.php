@@ -45,12 +45,9 @@
                     </div>
                     <div class="form-check">
                         <input type="radio" class="form-check-input" name="job_type" id="casual" value="Casual">
-                        <label for="casual" class="form-check-label">Casual</label>
+                        <label for="casual" class="form-check-label">Remote</label>
                     </div>
-                    <div class="form-check">
-                        <input type="radio" class="form-check-input" name="job_type" id="Contract" value="Contract">
-                        <label for="Contract" class="form-check-label">Contract</label>
-                    </div>
+
                     @error('job_type')
                     <div class="error">{{ $message }}</div>
                     @enderror

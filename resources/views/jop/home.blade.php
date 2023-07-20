@@ -55,7 +55,7 @@
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="{{route('create.jobs',['jop_type'=>'fulltime'])}}">Fulltime</a></li>
                         <li><a class="dropdown-item" href="{{route('create.jobs',['jop_type'=>'parttime'])}}">Parttime</a></li>
-                        <li><a class="dropdown-item" href="{{route('create.jobs',['jop_type'=>'casual'])}}">Casual</a></li>
+                        <li><a class="dropdown-item" href="{{route('create.jobs',['jop_type'=>'casual'])}}">Remote</a></li>
                     </ul>
                 </div>
                         <br>

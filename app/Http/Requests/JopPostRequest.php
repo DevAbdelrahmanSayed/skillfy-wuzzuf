@@ -26,9 +26,9 @@ class JopPostRequest extends FormRequest
             'description' => 'required|min:15',
             'roles' => 'required|min:10',
             'job_type' => 'required',
-            'feature_photo' => 'mimes:png,jpg,jpeg|max:2048',
+            'feature_photo' => 'required|mimes:png,jpg,jpeg|max:2048',
             'address' => 'required',
-            'salary' => 'required',
+            'salary' => 'required|numeric',
             'application_close_date' => 'required',
         ];
     }

@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('saved_posts', function (Blueprint $table) {
+        Schema::create('saved_listings', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('post_id');
+            $table->foreignId('listing_id')->references('id')->on('listings')->cascadeOnDelete();
+            $table->foreignId('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
+
         });
     }
 
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('saved_posts');
+        Schema::dropIfExists('saved_listings');
     }
 };

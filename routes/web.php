@@ -87,6 +87,7 @@ Route::get('/', [\App\Http\Controllers\HomeController::class, 'index']);
 
 
 Route::get('profile/seeker/contact', [\App\Http\Controllers\ContactController::class, 'showContact'])->name('show.contact');
+Route::post('profile/seeker/post', [\App\Http\Controllers\ContactController::class, 'sendMessage'])->name('store.contact');
 
 
 
