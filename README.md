@@ -4,8 +4,6 @@ This website assists job seekers in finding employment and helps employers locat
 
 ## Features
 
-List the features of your project with clear descriptions for each:
-
 - **Job Listing and Posting:** Enable employers to publish comprehensive job vacancies with detailed job descriptions, qualifications, and application specifics.
 - **Employers Dashboard:** Empower employers to manage job applicants by accepting or rejecting them.
 - **Candidate Profiles:** Allow job seekers to create and showcase professional profiles, including resumes and credentials.
