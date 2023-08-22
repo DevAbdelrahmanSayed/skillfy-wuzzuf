@@ -17,11 +17,9 @@ This website assists job seekers in finding employment and helps employers locat
 # Clone the repository
 git clone https://github.com/DevAbdelrahmanSayed/skillfy-wuzzuf.git
 
-```bash
 # Install dependencies
 composer install
-```bash
 composer dump-autoload
-```bash
+
 # Run the application
 php artisan serve
